@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Groundwater Level Predictor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --primary-dark: #1565c0;
+            --light-bg: #f0f7ff;
+            --input-border: #90caf9;
+            --text-color: #0d47a1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e3f2fd, #ffffff);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 500px;
+            background: white;
+            margin: 60px auto;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 12px 24px rgba(25, 118, 210, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            margin-top: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 30px;
+            background-color: #e3f2fd;
+            border-left: 6px solid var(--primary-color);
+            padding: 18px 22px;
+            border-radius: 12px;
+            color: var(--text-color);
+            animation: slideIn 0.5s ease;
+        }
+
+        .result p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 30px 16px;
+                padding: 25px 20px;
+                border-radius: 14px;
+            }
+
+            input, select, .btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .btn {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>💧 Groundwater Level Predictor</h2>
+
+    <form method="post">
+        <label>Latitude</label>
+        <input type="number" name="latitude" step="any" required>
+
+        <label>Longitude</label>
+        <input type="number" name="longitude" step="any" required>
+
+        <label>Well Depth (m)</label>
+        <input type="number" name="depth" step="any" required>
+
+        <label>Aquifer Type</label>
+        <select name="aquifer" required>
+            {% for aq in aquifers %}
+            <option value="{{ aq }}">{{ aq }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Pre-monsoon 2021 Level</label>
+        <input type="number" name="pre2021" step="any" required>
+
+        <label>Post-monsoon 2021 Level</label>
+        <input type="number" name="post2021" step="any" required>
+
+        <button class="btn" type="submit">🔍 Predict</button>
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        <p>🌱 <strong>Pre-monsoon 2022:</strong> {{ prediction.pre }} m below ground</p>
+        <p>💧 <strong>Post-monsoon 2022:</strong> {{ prediction.post }} m below ground</p>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
